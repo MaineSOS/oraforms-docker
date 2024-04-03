@@ -38,7 +38,7 @@ ENV ORACLE_HOME=/opt/oracle \
 # -----------------------------------------------------------------
 RUN mkdir -p /opt && \
     chmod a+xr /opt && \
-    useradd -b /opt -d /opt/oracle -m -s /bin/bash oracle && \
+    useradd -b /opt -d /opt/oracle -m -s /bin/bash -u 100 oracle && \
     mkdir -p /opt/oracle/container-scripts
 
 

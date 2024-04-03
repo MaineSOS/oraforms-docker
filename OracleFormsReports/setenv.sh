@@ -11,7 +11,7 @@ export DC_USERHOME=/opt/oracle
 # Registry names where requisite standard images
 # can be found
 export DC_REGISTRY_FR="localhost"
-export DC_REGISTRY_DB=
+export DC_REGISTRY_DB="OraLBprd.sos.w2k.state.me.us"
 
 # Proxy Environment
 #export http_proxy=""
@@ -28,8 +28,8 @@ exportComposeEnv() {
   #
   export DC_ORCL_PORT=1521
   export DC_ORCL_OEM_PORT=5500
-  export DC_ORCL_SID=frdb
-  export DC_ORCL_PDB=frpdb
+  export DC_ORCL_SID=bmvrpost
+  export DC_ORCL_PDB=BMVRPOST.bmv.state.me.us
   export DC_ORCL_SYSPWD=Oracle12c
   export DC_ORCL_HOST=${DC_HOSTNAME}
   #
@@ -55,15 +55,15 @@ exportComposeEnv() {
   # install OHS true / false
   export DC_WEBTIER12C=true
   export DC_OHS_COMPONENTNAME=ohs1
-  export DC_OHS_LISTENPORT=7777
+  export DC_OHS_LISTENPORT=7778
   export DC_OHS_SSLPORT=4443
 
   # Domain specific
   export DC_TEMPLATE=${DC_WL_HOME}/common/templates/wls/wls.jar
-  export DC_DOMAIN_NAME=FRTEST
+  export DC_DOMAIN_NAME=ClassicDomain
 
   # AdminServer
-  export DC_AS_NAME=FRTESTAdminServer
+  export DC_AS_NAME=AdminServer
   export DC_ADM_USER=weblogic
   export DC_ADM_PWD=welcome1
   export DC_ADMINPORT=7001
@@ -71,11 +71,11 @@ exportComposeEnv() {
   export DC_AS_HOST=`hostname -f`
 
   # Name and Port for the Forms Managed Server
-  export DC_FORMS_MS_NAME=MS_FORMS
+  export DC_FORMS_MS_NAME=WLS_FORMS
   export DC_FORMS12C_MS_PORT=9001
 
   # Name and Port for the Reports Managed Server
-  export DC_REPORTS_MS_NAME=MS_REPORTS
+  export DC_REPORTS_MS_NAME=WLS_REPORTS
   export DC_REPORTS12C_MS_PORT=9002
 
   # Move Reports Application into WLS_FORMS (true or false)
@@ -83,7 +83,7 @@ exportComposeEnv() {
 
   # Reports Server Definitions
   export DC_REP_SERVER=true
-  export DC_REP_SERVER_NAME=repserver1
+  export DC_REP_SERVER_NAME=rep_$(hostname -s)
 
   # NodeManager
   export DC_NM_LISTENADDRESS=`hostname -f`
@@ -97,8 +97,9 @@ exportComposeEnv() {
   export DC_DBPWD=Oracle12c
   export DC_DBROLE=SYSDBA
   export DC_COMPONENTPWD=Oracle12c
-  export DC_SCHEMA_PREFIX=${DC_DOMAIN_NAME}
-  export DC_DB_HOST=172.17.0.1
+  #export DC_SCHEMA_PREFIX=${DC_DOMAIN_NAME}
+  export DC_SCHEMA_PREFIX=DOCKDEV
+  export DC_DB_HOST="OraLBprd.sos.w2k.state.me.us"
   export DC_DB_PORT=${DC_ORCL_PORT}
   export DC_DB_SERVICE=${DC_ORCL_PDB}
   export DC_DB_OMF=false
@@ -108,7 +109,7 @@ exportComposeEnv() {
   #
   # Default version to use for compose images
   #
-  export DC_FR_VERSION=12.2.1.2
+  export DC_FR_VERSION=12.2.1.4
 }
 
 #===============================================

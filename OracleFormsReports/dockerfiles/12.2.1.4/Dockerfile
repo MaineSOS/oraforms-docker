@@ -30,7 +30,22 @@ ADD  $FMW_BIN2 /opt/
 ADD  $SQLDEV /opt/
 COPY container-scripts/* /opt/oracle/dockertools/
 RUN  cd /opt && chmod 755 *.bin && \
-     chmod a+xr /opt/oracle/dockertools/*.*
+     chmod a+xr /opt/oracle/dockertools/*.* && \
+     groupmod -g 101 users && groupadd -g 100 dba && groupadd -g 104 bmv && \
+     groupadd -g 107 rpt && groupadd -g 501 oinstall && \
+     useradd -c "BMV User" -g bmv -u 106 bmv && \
+     usermod -g dba -G oracle,dba,bmv,rpt,oinstall oracle
+RUN  yum install -y liberation-mono-fonts.noarch perl perl-libwww-perl perl-Sys-Syslog perl-Crypt-SSLeay perl-XML-Simple perl-Test-Simple poppler poppler-utils
+#WARN: installing ImageMagick->gdk-pixbuf2 causes a server reboot on OasDev1
+RUN  yum install -y ImageMagick ImageMagick-perl
+# SOS Config
+RUN mkdir -p /bmvdev && ln -s /reports/bmv/accept /bmvdev/oracle && \
+    ln -s /oramounts/CECDEV1_Images /CECDEV1 && \
+    ln -s /oramounts/CECDEV2_Images /CECDEV2 && \
+    ln -s /oramounts/CECTEST1_Images /CECTEST1 && \
+    ln -s /oramounts/CECTST1A_Images /CECTST1A && \
+    ln -s /opt/oracle/user_projects /home/oracle
+
 #
 USER oracle
 COPY install/* /opt/

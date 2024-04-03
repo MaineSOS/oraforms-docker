@@ -110,23 +110,30 @@ if ! test -d "${DOMAIN_BASE}/${DOMAIN_NAME}"; then
       echo "Oracle Reports Server ${REP_SERVER_NAME} is created"
    fi
 
-      # Set End Time
-      finish_time=$(date +%s)
-      echo "Finished"
-      echo "Domain Build Time: $(( $((finish_time - start_time))/60))  minutes."
-   else
-      # Docker Hack, if Domain is already created (first run), we will be here
-      # and can startup the Forms & Reports Domain
-      # In case we are facing problems with /dev/random
-      export CONFIG_JVM_ARGS=-Djava.security.egd=file:/dev/./urandom:$CONFIG_JVM_ARGS
-      # Avoiding MDS-11019 error messages
-      export JAVA_OPTIONS="${JAVA_OPTIONS} -Dfile.encoding=UTF8"
-      # Startup the Node Manager and AdminServer
-      echo "Domain is already installed and will be started..."
-      nohup ${DOMAIN_BASE}/${DOMAIN_NAME}/bin/startNodeManager.sh > /dev/null 2>&1 &
-      echo "Wait 30 seconds for Node Manager to start ..."
-      sleep 30
-      ${DOMAIN_BASE}/${DOMAIN_NAME}/startWebLogic.sh
-   fi
+	/mnt/dba/scripts/update-fr12c.sh
 
+	# Set End Time
+	finish_time=$(date +%s)
+	echo "Finished"
+	echo "Domain Build Time: $(( $((finish_time - start_time))/60))  minutes."
+else
+	export DOMAIN_HOME=${DOMAIN_BASE}/${DOMAIN_NAME}
+	if [ ! -f /opt/oracle/reports/jlib/oraclebarcode.jar ]; then
+		/mnt/dba/scripts/update-fr12c.sh
+	fi
 
+	# Docker Hack, if Domain is already created (first run), we will be here
+	# and can startup the Forms & Reports Domain
+	# In case we are facing problems with /dev/random
+	export CONFIG_JVM_ARGS=-Djava.security.egd=file:/dev/./urandom:$CONFIG_JVM_ARGS
+	# Avoiding MDS-11019 error messages
+	export JAVA_OPTIONS="${JAVA_OPTIONS} -Dfile.encoding=UTF8"
+	# Startup the Node Manager and AdminServer
+	echo "Domain is already installed and will be started..."
+	nohup ${DOMAIN_HOME}/bin/startNodeManager.sh > ${DOMAIN_HOME}/log/nodemanager.out 2>&1 &
+	echo "Wait 30 seconds for Node Manager to start ..."
+	sleep 30
+	${DOMAIN_HOME}/startWebLogic.sh
+fi
+
+#NOTE: after changing this file, rebuild the container

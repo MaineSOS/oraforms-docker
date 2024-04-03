@@ -77,7 +77,32 @@ services:
       - DB_OMF=${DC_DB_OMF}
       - DB_USER_PW=${DC_DB_USER_PW}
       - PWDFILE=${DC_PWDFILE}
+      - DOMAIN_HOME=${DC_DOMAIN_BASE}/${DC_DOMAIN_NAME}
+      - TZ=EST5EDT
+      - PATH=/opt/oracle/user_projects/domains/ClassicDomain/reports/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/java/default/bin:/opt/oracle/oracle_common/common/bin:/opt/oracle/wlserver/common/bin:/opt/oracle/container-scripts:/opt/oracle/bin:/mnt/dba/bin:/mnt/dba/scripts
+      - TNS_ADMIN=/mnt/dba/settings
+      - BMV_REPORTUSER_LOGIN=${BMV_REPORTUSER_LOGIN}
+      - CEC_REPORTUSER_LOGIN=${CEC_REPORTUSER_LOGIN}
+      - NOTIFY_EMAIL_ADDR=${NOTIFY_EMAIL_ADDR}
     volumes:
       - ${DC_DDIR_FR}:/opt/oracle/user_projects
-
-
+      - /app:/app
+      - /data:/data
+      - /mnt/dba:/mnt/dba:ro
+      - /oramounts:/oramounts:ro,shared
+      - /reports:/reports:shared
+    network_mode: "host"
+    extra_hosts:
+      - "CoreDB1-PRD:192.168.46.21"
+      - "CoreDB2-PRD:192.168.46.22"
+      - "oasprd1-prd:192.168.46.6"
+      - "oasprd2-prd:192.168.46.7"
+      - "oasprd1-DEV:192.168.100.9"
+      - "oasprd2-DEV:192.168.100.10"
+      - "CoreDB1-DEV:192.168.100.11"
+      - "CoreDB2-DEV:192.168.100.12"
+      - "CoreDB1-CEC:${IP_COREDB1_CEC}"
+      - "CoreDB2-CEC:${IP_COREDB2_CEC}"
+      - "oasdev1-dev:192.168.100.6"
+      - "oasdev2-dev:192.168.100.7"
+#Developer PC?

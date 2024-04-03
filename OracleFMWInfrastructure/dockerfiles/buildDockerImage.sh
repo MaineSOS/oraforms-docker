@@ -142,3 +142,4 @@ else
   echo "FMW Infrastructure Docker Image was NOT successfully created. Check the output and correct any reported problems with the docker build operation."
 fi
 
+: OK
